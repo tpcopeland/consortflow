@@ -1,0 +1,22 @@
+Package: consortflow
+Title: Sequential Exclusion Flowcharts for Observational Studies
+Version: 0.1.0
+Authors@R: person("Timothy P", "Copeland", role = c("aut", "cre"),
+                   email = "timothy.copeland@ki.se")
+Description: Create publication-ready CONSORT-style exclusion flowcharts for
+    observational studies. Provides a pipe-friendly API to sequentially exclude
+    observations from a data frame while tracking counts, then render the
+    exclusion flow as an auto-sizing diagram with labeled boxes and arrows.
+    Uses R's built-in grid graphics — no Python or external rendering
+    dependencies required.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    grid,
+    grDevices
+Suggests:
+    testthat (>= 3.0.0),
+    png
+Config/testthat/edition: 3
