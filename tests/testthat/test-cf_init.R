@@ -36,13 +36,22 @@ test_that("cf_init prints message with count", {
   expect_message(cf_init(d, label = "Test"), "100 observations")
 })
 
-test_that("print.consortflow displays correctly", {
+test_that("print.consortflow displays correctly with no steps", {
   d <- make_test_data()
   obj <- suppressMessages(cf_init(d, label = "Source"))
   out <- capture.output(print(obj))
   expect_true(any(grepl("1,000", out)))
   expect_true(any(grepl("Source", out)))
   expect_true(any(grepl("Steps:.*0", out)))
+})
+
+test_that("print.consortflow displays correctly with steps", {
+  d <- make_test_data()
+  obj <- suppressMessages(cf_init(d, label = "Source"))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "Under 18"))
+  out <- capture.output(print(obj))
+  expect_true(any(grepl("Steps:.*1", out)))
+  expect_true(any(grepl("Remaining:", out)))
 })
 
 test_that("cf_init coerces non-plain data.frames", {

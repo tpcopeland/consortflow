@@ -56,11 +56,11 @@ cf_save <- function(obj, output, final = "Final Cohort", shading = FALSE,
     stop("`font_family` must be a single character string.", call. = FALSE)
   }
 
-  ext <- tolower(tools::file_ext(output))
-  if (nchar(ext) == 0L) {
+  if (!grepl("\\.", basename(output))) {
     stop("`output` must have a file extension (.png, .pdf, or .svg).",
          call. = FALSE)
   }
+  ext <- tolower(sub(".*\\.", "", basename(output)))
 
   outdir <- dirname(output)
   if (!dir.exists(outdir)) {
@@ -131,6 +131,15 @@ cf_draw <- function(obj, final = "Final Cohort", shading = FALSE,
   }
   if (length(obj$steps) == 0L) {
     stop("No exclusion steps recorded. Run cf_exclude() first.", call. = FALSE)
+  }
+  if (!is.character(final) || length(final) != 1L) {
+    stop("`final` must be a single character string.", call. = FALSE)
+  }
+  if (!is.logical(shading) || length(shading) != 1L) {
+    stop("`shading` must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (!is.character(font_family) || length(font_family) != 1L) {
+    stop("`font_family` must be a single character string.", call. = FALSE)
   }
   .render_diagram(obj, final = final, shading = shading,
                   font_family = font_family)

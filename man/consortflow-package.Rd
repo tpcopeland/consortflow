@@ -8,6 +8,14 @@
 \description{
 Create publication-ready CONSORT-style exclusion flowcharts for observational studies. Provides a pipe-friendly API to sequentially exclude observations from a data frame while tracking counts, then render the exclusion flow as an auto-sizing diagram with labeled boxes and arrows. Uses R's built-in grid graphics — no Python or external rendering dependencies required.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/tpcopeland/R-Packages}
+  \item Report bugs at \url{https://github.com/tpcopeland/R-Packages/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Timothy P Copeland \email{timothy.copeland@ki.se}
 

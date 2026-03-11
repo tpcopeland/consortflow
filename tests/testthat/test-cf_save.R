@@ -169,3 +169,90 @@ test_that("cf_save rejects nonexistent output directory", {
     "does not exist"
   )
 })
+
+test_that("cf_save creates an SVG file", {
+  d <- make_test_data()
+  obj <- suppressMessages(cf_init(d, label = "All"))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "Under 18"))
+
+  outfile <- tempfile(fileext = ".svg")
+  on.exit(unlink(outfile), add = TRUE)
+
+  result <- suppressMessages(
+    cf_save(obj, output = outfile, final = "Final")
+  )
+
+  expect_true(file.exists(outfile))
+  expect_true(file.size(outfile) > 0)
+})
+
+test_that("cf_save validates font_family parameter", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "x"))
+
+  expect_error(
+    cf_save(obj, output = tempfile(fileext = ".png"), font_family = 123),
+    "single character string"
+  )
+})
+
+test_that("cf_draw validates final parameter", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "x"))
+
+  expect_error(cf_draw(obj, final = 123), "single character string")
+})
+
+test_that("cf_draw validates shading parameter", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "x"))
+
+  expect_error(cf_draw(obj, shading = "yes"), "TRUE or FALSE")
+})
+
+test_that("cf_draw validates font_family parameter", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "x"))
+
+  expect_error(cf_draw(obj, font_family = 42), "single character string")
+})
+
+test_that("cf_draw rejects non-consortflow object", {
+  expect_error(cf_draw(list()), "consortflow object")
+})
+
+test_that("cf_draw rejects object with no steps", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  expect_error(cf_draw(obj), "No exclusion steps")
+})
+
+test_that("cf_save validates output parameter type", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "x"))
+
+  expect_error(cf_save(obj, output = 123), "single file path")
+})
+
+test_that("cf_save renders remaining_label on middle steps", {
+  d <- make_test_data()
+  obj <- suppressMessages(cf_init(d, label = "All"))
+  obj <- suppressMessages(cf_exclude(obj, age < 18, label = "Under 18",
+                                     remaining = "Adult cohort"))
+  obj <- suppressMessages(cf_exclude(obj, followup < 30, label = "Short FU"))
+
+  outfile <- tempfile(fileext = ".png")
+  on.exit(unlink(outfile), add = TRUE)
+
+  result <- suppressMessages(
+    cf_save(obj, output = outfile, final = "Final", dpi = 72)
+  )
+
+  expect_true(file.exists(outfile))
+  expect_true(file.size(outfile) > 0)
+})

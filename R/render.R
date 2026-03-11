@@ -81,12 +81,26 @@
       } else {
         words <- strsplit(line, " ")[[1]]
         current <- words[1]
+        # force-break single words longer than max_chars
+        if (nchar(current) > max_chars) {
+          while (nchar(current) > max_chars) {
+            out <- c(out, substr(current, 1, max_chars))
+            current <- substr(current, max_chars + 1L, nchar(current))
+          }
+        }
         for (w in words[-1]) {
           if (nchar(paste(current, w)) <= max_chars) {
             current <- paste(current, w)
           } else {
             out <- c(out, current)
             current <- w
+            # force-break long words
+            if (nchar(current) > max_chars) {
+              while (nchar(current) > max_chars) {
+                out <- c(out, substr(current, 1, max_chars))
+                current <- substr(current, max_chars + 1L, nchar(current))
+              }
+            }
           }
         }
         out <- c(out, current)

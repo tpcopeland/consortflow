@@ -107,3 +107,25 @@ test_that("cf_exclude rejects recycled mask", {
     "does not match"
   )
 })
+
+test_that("cf_exclude rejects bad remaining parameter", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  expect_error(
+    cf_exclude(obj, age < 18, label = "x", remaining = 123),
+    "single character string"
+  )
+  expect_error(
+    cf_exclude(obj, age < 18, label = "x", remaining = c("a", "b")),
+    "single character string"
+  )
+})
+
+test_that("cf_exclude rejects non-logical condition result", {
+  d <- make_test_data(n = 10)
+  obj <- suppressMessages(cf_init(d))
+  expect_error(
+    cf_exclude(obj, age, label = "Numeric result"),
+    "logical vector"
+  )
+})
